@@ -18,8 +18,22 @@ router.get("/new", (req, res) => {
 
 // Create New Author
 router.post("/", (req, res) => {
-  res.send("Create a new author!");
+  const author = new Author({
+    name: req.body.name
+  });
+
+  author.save()
+    .then((newAuthor) => {
+      res.redirect('/authors');
+    })
+    .catch((err) => {
+      res.render('authors/new', {
+        author: author,
+        message: err.message
+      });
+    });
 });
+
 
 // Exporting the module so it can be used in other files
 module.exports = router;

@@ -1,7 +1,10 @@
+// importing enviroment libraries
 const express = require("express");
 const expressLayout = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
+
 dotenv.config();
 
 // Importing route
@@ -17,6 +20,8 @@ app.set("views", __dirname + "/views");
 app.set("layout", "layouts/layout"); // set layout for all pages
 app.use(expressLayout);
 app.use(express.static("public")); // static files will be served from public folder
+// Body parser middleware
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 // using routes
 app.use("/", indexRouter);
