@@ -7,8 +7,13 @@ const Author = require("../models/author");
 const router = express.Router();
 
 // All authors Endpoint
-router.get("/", (req, res) => {
-  res.render("authors/index", { errorMessage: "" });
+router.get("/", async (req, res) => {
+  try {
+    const authors = await Author.find(); // get all authors
+    res.render("authors/index", { authors: authors });
+  } catch (err) {
+    res.redirect("/");
+  }
 });
 
 // New Author Endpoint
@@ -26,7 +31,8 @@ router.post("/", async (req, res) => {
     res.redirect("/authors");
   } catch (error) {
     let errorMessage = "Error creating author";
-    if (error.code === 11000) { // Duplicate key error
+    if (error.code === 11000) {
+      // Duplicate key error
       errorMessage = "Author with this name already exists";
     }
     res.render("authors/new", {
@@ -35,6 +41,5 @@ router.post("/", async (req, res) => {
     });
   }
 });
-
 
 module.exports = router;
